@@ -14,11 +14,11 @@ datasource db {
 }
 
 model Contact {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   firstName String
   lastName  String
   email     String   @unique
-  phone     String
+  phone     String   @unique
   company   String
   jobTitle  String
   createdAt DateTime @default(now())
