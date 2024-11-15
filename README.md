@@ -109,15 +109,13 @@ You can access the live application [here](https://contact-management-neon-one.v
 - **Solution**: Used async/await syntax to handle asynchronous operations in the backend. Ensured all promises are properly awaited and errors are caught using try-catch blocks.
 
 ### Challenge 2: State Management in React
-- **Solution**: Used React's useState and useEffect hooks to manage state and side effects. Implemented filtering and sorting functionality to enhance user experience.
+- **Solution**: Used React's useState and useEffect hooks to manage state and side effects.
 
 ### Challenge 3: TypeScript Integration
-- **Solution**: Ensured type safety by defining interfaces for data structures and using TypeScript's type assertions. Created a `vite-env.d.ts` file to declare environment variables.
+- **Solution**: Ensured type safety by defining interfaces for data structures and using TypeScript's type assertions.
 
 ### Challenge 4: Error Handling
 - **Solution**: Implemented centralized error handling in Express using middleware. Ensured all routes and controllers have proper error handling mechanisms.
 
 ### Challenge 5: Implementing Pagination
 - **Solution**: Implemented pagination by using Material-UI's `TablePagination` component. Managed the current page and rows per page using React's useState hook. Updated the backend API to accept pagination parameters (`page` and `limit`) and return the total number of contacts along with the paginated data. This ensured that the frontend could correctly display the paginated data and navigate between pages.
-
-By following these instructions and understanding the project structure, you should be able to set up and run the Contact Management application successfully.
