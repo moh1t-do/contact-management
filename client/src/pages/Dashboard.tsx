@@ -95,7 +95,7 @@ export default function ColumnGroupingTable() {
         setTotalContacts(data.totalContacts);
     }
 
-    const handleChangePage = (event: unknown, newPage: number) => {
+    const handleChangePage = (_: any, newPage: number) => {
         setPage(newPage);
     };
 
