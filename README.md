@@ -1,9 +1,11 @@
 ## OVERVIEW
 Contact Management feature helps users of the system to keep track of important contact information of customers/clients. It lets users add, view, update, and delete contact details all in one place. This makes it easy for users to find and manage information, which is especially helpful in a business setting where keeping track of relationships is key. For example, users can quickly find contact information, update it if anything changes, delete old contacts, or add new contacts. Having all this information in one organized space saves time and keeps everything efficient.
 
-### User Interface
+### Live Link
+You can access the live application [here](https://contact-management-neon-one.vercel.app).
 
-![UI Screenshot](/images/ui.png)
+### User Interface
+![UI Screenshot](images/ui.png)
 
 ### Database Schema
 
@@ -18,7 +20,6 @@ Contact Management feature helps users of the system to keep track of important 
 | jobTitle  | String   |                           |
 | createdAt | DateTime | @default(now())           |
 | updatedAt | DateTime | @updatedAt                |
-
 
 ## SETUP INSTRUCTIONS
 
@@ -46,27 +47,45 @@ Contact Management feature helps users of the system to keep track of important 
     CLIENT_URL=http://localhost:5173
     ```
 
-4. Start the backend server:
+4. Generate Prisma artifacts (e.g., Prisma Client):
+    ```sh
+    npx prisma generate
+    ```
+
+5. Apply database migrations:
+    ```sh
+    npx prisma migrate dev --name init
+    ```
+
+6. Start the backend server:
     ```sh
     npm start
     ```
 
 ### Frontend Setup
 
-1. Install dependencies:
+1. Navigate to the `client` directory:
+    ```sh
+    cd ../client
+    ```
+
+2. Install dependencies:
     ```sh
     npm install
     ```
 
-2. Create a `.env` file in the `client` directory and add the following environment variables:
+3. Create a `.env` file in the `client` directory and add the following environment variables:
     ```env
     VITE_SERVER_URL=http://localhost:8000
     ```
 
-3. Start the frontend development server:
+4. Start the frontend development server:
     ```sh
     npm run dev
     ```
+
+### Running the Application
+1. Open your browser and navigate to `http://localhost:5173` to access the Contact Management application.
 
 ## PROJECT DESCRIPTION
 
@@ -75,11 +94,30 @@ Contact Management feature helps users of the system to keep track of important 
 - **Frontend**: Built with React and Material-UI for a responsive and modern user interface.
 - **Database**: PostgreSQL is used for storing contact information.
 
+### Application Structure
+- **Backend**:
+  - `server/src/index.ts`: Entry point of the backend server.
+  - `server/src/routes/contact.route.ts`: Defines the API routes for contact operations.
+  - `server/src/controllers/contact.controller.ts`: Contains the logic for handling API requests.
+- **Frontend**:
+  - `client/src/pages/Dashboard.tsx`: Main page displaying the list of contacts with options to add, update, and delete.
+  - `client/src/components/Form.tsx`: Form component used for both creating and updating contacts.
+
 ## CHALLENGES AND SOLUTIONS
 
-### Reason for choosing PostgreSQL
+### Challenge 1: Handling Asynchronous Operations
+- **Solution**: Used async/await syntax to handle asynchronous operations in the backend. Ensured all promises are properly awaited and errors are caught using try-catch blocks.
 
-- Offers strong schema enforcement at database level.
-- Ensures data consistency by validating the structure (e.g., email must always be unique, firstName and lastName are required).
-- Particularly useful for structured data like contacts where fields are clearly defined.
-- Best for data with relationships. For instance, in a full CRM, you might associate contacts with companies or accounts in other tables.
+### Challenge 2: State Management in React
+- **Solution**: Used React's useState and useEffect hooks to manage state and side effects. Implemented filtering and sorting functionality to enhance user experience.
+
+### Challenge 3: TypeScript Integration
+- **Solution**: Ensured type safety by defining interfaces for data structures and using TypeScript's type assertions. Created a `vite-env.d.ts` file to declare environment variables.
+
+### Challenge 4: Error Handling
+- **Solution**: Implemented centralized error handling in Express using middleware. Ensured all routes and controllers have proper error handling mechanisms.
+
+### Challenge 5: Implementing Pagination
+- **Solution**: Implemented pagination by using Material-UI's `TablePagination` component. Managed the current page and rows per page using React's useState hook. Updated the backend API to accept pagination parameters (`page` and `limit`) and return the total number of contacts along with the paginated data. This ensured that the frontend could correctly display the paginated data and navigate between pages.
+
+By following these instructions and understanding the project structure, you should be able to set up and run the Contact Management application successfully.
