@@ -47,17 +47,7 @@ You can access the live application [here](https://contact-management-neon-one.v
     CLIENT_URL=http://localhost:5173
     ```
 
-4. Generate Prisma artifacts (e.g., Prisma Client):
-    ```sh
-    npx prisma generate
-    ```
-
-5. Apply database migrations:
-    ```sh
-    npx prisma migrate dev --name init
-    ```
-
-6. Start the backend server:
+4. Start the backend server:
     ```sh
     npm start
     ```
@@ -76,7 +66,7 @@ You can access the live application [here](https://contact-management-neon-one.v
 
 3. Create a `.env` file in the `client` directory and add the following environment variables:
     ```env
-    VITE_SERVER_URL=http://localhost:8000
+    VITE_SERVER_URL=http://localhost:8000/api/v1
     ```
 
 4. Start the frontend development server:
