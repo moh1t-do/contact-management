@@ -42,7 +42,7 @@ Contact Management feature helps users of the system to keep track of important 
 3. Create a `.env` file in the `server` directory and add the following environment variables:
     ```env
     SERVER_PORT=8000
-    DB_URL=postgresql://username:password@localhost:5432/contactdb
+    DATABASE_URL=postgresql://username:password@localhost:5432/contactdb
     CLIENT_URL=http://localhost:5173
     ```
 
