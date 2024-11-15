@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
-import { PrismaClient } from "@prisma/client";
+import e, { NextFunction, Request, Response } from 'express';
+import { Prisma, PrismaClient } from "@prisma/client";
 import { z, ZodError } from "zod";
 
 const prisma = new PrismaClient();
 
-const contactSchema = z.object({
+const contactCreateSchema = z.object({
     firstName: z.string().min(1, "First Name is required"),
     lastName: z.string().min(1, "Last Name is required"),
     email: z.string().email("Invalid email address"),
@@ -22,40 +22,78 @@ const contactUpdateSchema = z.object({
     jobTitle: z.string().optional()
 });
 
-export async function handleCreateContact(req: Request, res: Response) {
+export async function handleCreateContact(req: Request, res: Response, next: NextFunction) {
     try {
-        const contactData = contactSchema.parse(req.body);
-        const newContact = await prisma.contact.create({
+        const contactData = contactCreateSchema.parse(req.body);
+        await prisma.contact.create({
             data: contactData
         });
         res.status(201).json({
             message: "Contact created successfully"
         });
-
     } catch (error) {
-        console.error(error);
-        res.status(400).json({
-            error
-        });
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                res.status(400).json({
+                    message: `Account already exists`
+                });
+            }
+            else if (error.code === 'P2025') {
+                res.status(400).json({
+                    message: `${error.meta?.cause}`
+                })
+            }
+        }
+        else if (error instanceof ZodError) {
+            res.status(400).json({
+                message: error.errors[0].message
+            });
+        }
+        else {
+            res.sendStatus(500);
+        }
     }
 }
 
+
 export async function handleGetAllContacts(req: Request, res: Response) {
+    const { page, limit } = req.query;
+    const pageNumber = parseInt(page as string, 10);
+    const limitNumber = parseInt(limit as string, 10);
+
     try {
-        const contacts = await prisma.contact.findMany();
-        if (contacts.length == 0) {
-            res.status(404).json({ message: "No contacts found" });
+        const contacts = await prisma.contact.findMany({
+            skip: (pageNumber - 1) * limitNumber,
+            take: limitNumber,
+        });
+
+        const totalContacts = await prisma.contact.count();
+
+        res.status(200).json({
+            contacts,
+            totalContacts
+        });
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                res.status(400).json({
+                    message: `Account already exists`
+                });
+            }
+            else if (error.code === 'P2025') {
+                res.status(400).json({
+                    message: `${error.meta?.cause}`
+                })
+            }
         }
-        else {
-            res.status(200).json({
-                contacts
+        else if (error instanceof ZodError) {
+            res.status(400).json({
+                message: error.errors[0].message
             });
         }
-    } catch (error) {
-        console.error(error)
-        res.status(400).json({
-            error
-        })
+        else {
+            res.sendStatus(500);
+        }
     }
 }
 
@@ -74,16 +112,31 @@ export async function handleUpdateContact(req: Request, res: Response) {
         });
     }
     catch (error) {
-        console.error(error);
-        res.status(400).json({
-            error
-        });
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                res.status(400).json({
+                    message: `Account already exists`
+                });
+            }
+            else if (error.code === 'P2025') {
+                res.status(400).json({
+                    message: `${error.meta?.cause}`
+                })
+            }
+        }
+        else if (error instanceof ZodError) {
+            res.status(400).json({
+                message: error.errors[0].message
+            });
+        }
+        else {
+            res.sendStatus(500);
+        }
     }
 }
 
 export async function handleDeleteContact(req: Request, res: Response) {
     const { id } = req.params;
-    console.log(id);
     try {
         await prisma.contact.delete({
             where: {
@@ -94,9 +147,25 @@ export async function handleDeleteContact(req: Request, res: Response) {
             message: "Contact deleted successfully"
         });
     } catch (error) {
-        console.error(error);
-        res.status(400).json({
-            error
-        });
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                res.status(400).json({
+                    message: `Account already exists`
+                });
+            }
+            else if (error.code === 'P2025') {
+                res.status(400).json({
+                    message: `${error.meta?.cause}`
+                })
+            }
+        }
+        else if (error instanceof ZodError) {
+            res.status(400).json({
+                message: error.errors[0].message
+            });
+        }
+        else {
+            res.sendStatus(500);
+        }
     }
 }
